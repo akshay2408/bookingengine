@@ -1,4 +1,7 @@
 from django.db import models
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 class Listing(models.Model):
@@ -74,3 +77,18 @@ class BookingInfo(models.Model):
             obj = self.hotel_room_type
             
         return f'{obj} {self.price}'
+
+
+class ReservedInfo(models.Model):
+    booking_info = models.ForeignKey(
+        BookingInfo,
+        on_delete=models.CASCADE,
+        related_name='reservation_info'
+    )
+    guest = models.ForeignKey(
+        User, 
+        on_delete=models.CASCADE,
+        related_name='reservation_holder',
+    )
+    check_in = models.DateTimeField()
+    check_out = models.DateTimeField()
