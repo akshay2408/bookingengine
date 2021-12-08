@@ -22,16 +22,15 @@ class AvailableHotelSerializer(serializers.ModelSerializer):
         fields = ["listing_type", "title", "country", "city", "price"]
 
     def get_listing_type(self, data):
-        return data.listing.listing_type if data.listing else None
+        return data.listing.listing_type if data.listing else data.hotel_room_type.hotel.listing_type
 
     def get_title(self, data):
-        return data.listing.title if data.listing else None
+        return data.listing.title if data.listing else data.hotel_room_type.hotel.title
 
     def get_country(self, data):
-        return data.listing.country if data.listing else None
+        return data.listing.country if data.listing else data.hotel_room_type.hotel.country
 
     def get_city(self, data):
-        return data.listing.city if data.listing else None
-
+        return data.listing.city if data.listing else data.hotel_room_type.hotel.city
     def get_price(self, data):
         return data.price

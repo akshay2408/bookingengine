@@ -1,5 +1,5 @@
 import datetime
-
+from django.db.models import Q
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 
@@ -20,7 +20,8 @@ class AvailableHotelView(ListAPIView):
         check_out_date = datetime.datetime.strptime(check_out, "%Y-%m-%d").date()
         booked_id = ReservedInfo.objects.filter(check_in__date__lte=check_out_date).filter(
             check_out__date__gte=check_in_date).values_list('booking_info_id', flat=True)
-        qs = BookingInfo.objects.filter(price__lte=int(max_price)).exclude(id__in=booked_id).order_by("price")
+        qs = BookingInfo.objects.filter(price__lte=max_price).filter(Q(hotel_room_type__isnull=False)
+                                                                    |Q(listing__isnull=False)).exclude(id__in=booked_id).order_by("price")
         return qs
 
     def list(self, request, *args, **kwargs):

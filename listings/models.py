@@ -92,3 +92,7 @@ class ReservedInfo(models.Model):
     )
     check_in = models.DateTimeField()
     check_out = models.DateTimeField()
+
+    def __str__(self):
+        obj = self.booking_info
+        return f'{obj} {self.guest}'
